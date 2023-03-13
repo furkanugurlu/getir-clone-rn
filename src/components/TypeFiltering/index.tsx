@@ -54,6 +54,8 @@ const styles = StyleSheet.create({
       width: '100%',
       backgroundColor: 'white',
       height: height * 0.072,
+      borderBottomColor: 'lightgrey',
+      borderBottomWidth: 0.5,
    },
    typeBoxWrapper: {
       paddingHorizontal: 10,

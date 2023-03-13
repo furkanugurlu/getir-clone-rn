@@ -1,11 +1,43 @@
-import { Text, Image } from 'react-native'
-import React from 'react'
+import { Text, Image, TouchableOpacity } from 'react-native'
+import React, { FC, ReactNode } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import HomeScreen from '../screens/HomeScreen'
 import CategoryFilterScreen from '../screens/CategoryFilterScreen'
+import ProductDetailScreen from '../screens/ProductDetailScreen'
+import { Ionicons } from '@expo/vector-icons'
+import { getFocusedRouteNameFromRoute, useNavigation } from '@react-navigation/native'
+import { Foundation } from '@expo/vector-icons'
 
 const Stack = createNativeStackNavigator()
-const HomeNavigator = () => {
+
+const MyStack = ({ navigation, route }: any) => {
+   const tabHiddenRoutes = ['ProductDetail']
+
+   const returnOption = (title: string, headerLeft?: FC | null, headerRight?: FC | null) => {
+      return {
+         headerTintColor: 'white',
+         headerStyle: { backgroundColor: '#5C3EBC' },
+         headerBackTitle: '',
+         headerTitle: () => {
+            return <Text style={{ color: 'white', fontSize: 15, fontWeight: 'bold' }}>{title}</Text>
+         },
+         ...(headerLeft && {
+            headerLeft: headerLeft,
+         }),
+         ...(headerRight && {
+            headerRight: headerRight,
+         }),
+      }
+   }
+
+   React.useLayoutEffect(() => {
+      const routeName = getFocusedRouteNameFromRoute(route)
+      if (tabHiddenRoutes.includes(routeName as string)) {
+         navigation.setOptions({ tabBarStyle: { display: 'none' } })
+      } else {
+         navigation.setOptions({ tabBarStyle: { display: 'true' } })
+      }
+   }, [navigation, route])
    return (
       <Stack.Navigator
          screenOptions={{
@@ -25,17 +57,32 @@ const HomeNavigator = () => {
          <Stack.Screen
             name="CategoryDetails"
             component={CategoryFilterScreen}
-            options={{
-               headerTintColor: 'white',
-               headerStyle: { backgroundColor: '#5C3EBC' },
-               headerBackTitle: '',
-               headerTitle: () => {
-                  return <Text style={{ color: 'white', fontSize: 15, fontWeight: 'bold' }}>Ürünler</Text>
+            options={returnOption('Ürünler', null)}
+         />
+         <Stack.Screen
+            name="ProductDetail"
+            component={ProductDetailScreen}
+            options={returnOption(
+               'Ürün Detayı',
+               () => {
+                  return (
+                     <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <Ionicons name="close" size={24} color="white" />
+                     </TouchableOpacity>
+                  )
                },
-            }}
+               () => {
+                  return (
+                     <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <Foundation name="heart" size={24} color="#32177a" />
+                     </TouchableOpacity>
+                  )
+               }
+            )}
          />
       </Stack.Navigator>
    )
 }
-
-export default HomeNavigator
+export default function HomeNavigator({ navigation, route }: any) {
+   return <MyStack navigation={navigation} route={route} />
+}

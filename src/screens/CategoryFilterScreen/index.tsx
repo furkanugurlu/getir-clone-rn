@@ -1,8 +1,6 @@
-import { View, Text, ScrollView } from 'react-native'
+import { ScrollView } from 'react-native'
 import React, { useState } from 'react'
-import styles from './styles'
-import { CategoryFiltering, TypeFiltering } from '../../components'
-import { Category } from '../../types'
+import { CategoryFiltering, TypeFiltering, ProductItem, ProductContainer } from '../../components'
 
 interface CategoryFilterScreenPropsType {
    route: any
@@ -15,6 +13,7 @@ const index = ({ route }: CategoryFilterScreenPropsType) => {
       <ScrollView>
          <CategoryFiltering category={category} />
          <TypeFiltering />
+         <ProductContainer />
       </ScrollView>
    )
 }

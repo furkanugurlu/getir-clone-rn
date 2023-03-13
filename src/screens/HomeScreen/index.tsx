@@ -1,6 +1,5 @@
-import { ScrollView } from 'react-native'
+import { ScrollView, StyleSheet } from 'react-native'
 import React from 'react'
-import styles from './styles'
 import { HeaderMain, BannerCarousel, MainCategories } from '../../components'
 
 const index = () => {
@@ -14,3 +13,9 @@ const index = () => {
 }
 
 export default index
+
+const styles = StyleSheet.create({
+   container: {
+      backgroundColor: '#f5f5f5',
+   },
+})
