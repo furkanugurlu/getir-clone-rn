@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import { CategoryItems } from '../'
 import categoriesDummyData from '../../../assets/categoriesDummyData'
 import { Category } from '../../types'
-
 const MainCategories = () => {
    const [categories, setCategories] = useState<Category[]>(categoriesDummyData)
    return (
