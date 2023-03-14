@@ -9,8 +9,9 @@ const { width, height } = Dimensions.get('window')
 interface ProductItemPropsType {
    item: Product
    ml?: number
+   isDiscount?: boolean
 }
-const ProductItem: FC<ProductItemPropsType> = ({ item, ml }) => {
+const ProductItem: FC<ProductItemPropsType> = ({ item, ml, isDiscount }) => {
    const navigation = useNavigation()
    return (
       <TouchableOpacity
@@ -25,12 +26,14 @@ const ProductItem: FC<ProductItemPropsType> = ({ item, ml }) => {
          <Image style={styles.productImageStyle} source={{ uri: item.image }} />
          <View style={styles.productDetailsWrapper}>
             <Text style={styles.productPriceText}>
-               <Text style={{ textDecorationLine: 'line-through' }}>
-                  <Text>{'\u20BA'}</Text>
-                  {item.fiyatIndirimli}
-               </Text>
+               {!isDiscount && (
+                  <Text style={{ textDecorationLine: 'line-through' }}>
+                     <Text>{'\u20BA'}</Text>
+                     {item.fiyatIndirimli}
+                  </Text>
+               )}
                <Text style={{ color: '#5d3ebd', fontSize: 12 }}>
-                  {' '}
+                  {isDiscount ? '' : ' '}
                   <Text>{'\u20BA'}</Text>
                   {item.fiyat}
                </Text>

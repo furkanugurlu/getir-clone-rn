@@ -1,19 +1,18 @@
-import { Text, Image, TouchableOpacity } from 'react-native'
-import React, { FC, ReactNode } from 'react'
+import { Text, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native'
+import React, { FC } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import HomeScreen from '../screens/HomeScreen'
 import CategoryFilterScreen from '../screens/CategoryFilterScreen'
 import ProductDetailScreen from '../screens/ProductDetailScreen'
+import CartScreen from '../screens/CartScreen'
 import { Ionicons } from '@expo/vector-icons'
-import { getFocusedRouteNameFromRoute, useNavigation } from '@react-navigation/native'
 import { Foundation } from '@expo/vector-icons'
 
 const Stack = createNativeStackNavigator()
 
-const MyStack = ({ navigation, route }: any) => {
-   const tabHiddenRoutes = ['ProductDetail']
-
-   const returnOption = (title: string, headerLeft?: FC | null, headerRight?: FC | null) => {
+const { width } = Dimensions.get('window')
+const HomeNavigator = ({ navigation, route }: any) => {
+   const returnOption = (title: string, headerLeft?: FC | null | boolean, headerRight?: FC | null) => {
       return {
          headerTintColor: 'white',
          headerStyle: { backgroundColor: '#5C3EBC' },
@@ -22,7 +21,11 @@ const MyStack = ({ navigation, route }: any) => {
             return <Text style={{ color: 'white', fontSize: 15, fontWeight: 'bold' }}>{title}</Text>
          },
          ...(headerLeft && {
-            headerLeft: headerLeft,
+            headerLeft: () => (
+               <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Ionicons name="close" size={28} color="white" />
+               </TouchableOpacity>
+            ),
          }),
          ...(headerRight && {
             headerRight: headerRight,
@@ -30,14 +33,6 @@ const MyStack = ({ navigation, route }: any) => {
       }
    }
 
-   React.useLayoutEffect(() => {
-      const routeName = getFocusedRouteNameFromRoute(route)
-      if (tabHiddenRoutes.includes(routeName as string)) {
-         navigation.setOptions({ tabBarStyle: { display: 'none' } })
-      } else {
-         navigation.setOptions({ tabBarStyle: { display: 'true' } })
-      }
-   }, [navigation, route])
    return (
       <Stack.Navigator
          screenOptions={{
@@ -57,32 +52,58 @@ const MyStack = ({ navigation, route }: any) => {
          <Stack.Screen
             name="CategoryDetails"
             component={CategoryFilterScreen}
-            options={returnOption('Ürünler', null)}
+            options={returnOption('Ürünler', null, () => {
+               return (
+                  <TouchableOpacity onPress={() => navigation.navigate('CartScreen')} style={styles.basketBtn}>
+                     <Image source={require('../../assets/cart.png')} style={styles.basketBtnImage} />
+                     <Text style={styles.basketBtnText}>{'\u20BA'}13,00</Text>
+                  </TouchableOpacity>
+               )
+            })}
          />
          <Stack.Screen
             name="ProductDetail"
             component={ProductDetailScreen}
-            options={returnOption(
-               'Ürün Detayı',
-               () => {
-                  return (
-                     <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <Ionicons name="close" size={24} color="white" />
-                     </TouchableOpacity>
-                  )
-               },
-               () => {
-                  return (
-                     <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <Foundation name="heart" size={24} color="#32177a" />
-                     </TouchableOpacity>
-                  )
-               }
-            )}
+            options={returnOption('Ürün Detayı', true, () => {
+               return (
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
+                     <Foundation name="heart" size={24} color="#32177a" />
+                  </TouchableOpacity>
+               )
+            })}
+         />
+         <Stack.Screen
+            name="CartScreen"
+            component={CartScreen}
+            options={returnOption('Sepetim', true, () => (
+               <TouchableOpacity>
+                  <Ionicons name="trash-sharp" size={24} color="white" />
+               </TouchableOpacity>
+            ))}
          />
       </Stack.Navigator>
    )
 }
-export default function HomeNavigator({ navigation, route }: any) {
-   return <MyStack navigation={navigation} route={route} />
-}
+export default HomeNavigator
+
+const styles = StyleSheet.create({
+   basketBtn: {
+      width: width * 0.22,
+      height: 33,
+      backgroundColor: 'white',
+      borderRadius: 9,
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingHorizontal: 4,
+      justifyContent: 'space-between',
+   },
+   basketBtnImage: {
+      width: 25,
+      height: 25,
+   },
+   basketBtnText: {
+      color: '#5d3ebd',
+      fontWeight: 'bold',
+      fontSize: 12,
+   },
+})
