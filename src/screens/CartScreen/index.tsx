@@ -2,9 +2,14 @@ import { View, Text, FlatList, ScrollView, StyleSheet, Dimensions, TouchableOpac
 import React from 'react'
 import productDummyData from '../../../assets/productDummyData'
 import { CartItem, ProductItem } from '../../components'
+import { useSelector } from 'react-redux'
+import { AppState } from '../../store/reducers'
 
 const { height, width } = Dimensions.get('window')
 const index = () => {
+   const { loading } = useSelector((state: AppState) => state.main)
+   console.log({ loading })
+
    return (
       <View style={{ flex: 1 }}>
          <ScrollView style={{ marginBottom: height * 0.1 }} showsVerticalScrollIndicator={false}>
