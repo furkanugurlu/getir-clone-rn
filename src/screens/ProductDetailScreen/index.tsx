@@ -2,12 +2,16 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Product } from '../../types'
 import { ImageCarousel, DetailBox, DetailProperty, CardButton } from '../../components'
+import { useDispatch } from 'react-redux'
+import { addToCart } from '../../store/actions/CartActions/CartActions'
 
 interface ProductDetailPropsType {
    route: any
 }
 const index = ({ route }: ProductDetailPropsType) => {
    const product: Product = route.params.product
+
+   const dispatch = useDispatch()
 
    return (
       <View style={{ flex: 1 }}>
@@ -17,7 +21,7 @@ const index = ({ route }: ProductDetailPropsType) => {
             <Text style={styles.detailTitle}>Detaylar</Text>
             <DetailProperty />
          </ScrollView>
-         <CardButton />
+         <CardButton onPress={() => dispatch(addToCart(product) as any)} />
       </View>
    )
 }

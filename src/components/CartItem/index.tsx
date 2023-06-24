@@ -1,6 +1,8 @@
-import { View, Text, StyleSheet, Image, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native'
 import React, { FC } from 'react'
 import { Product } from '../../types'
+import { useDispatch } from 'react-redux'
+import { removeFromCart } from '../../store/actions/CartActions/CartActions'
 
 interface CartItemPropsType {
    product: Product
@@ -8,6 +10,7 @@ interface CartItemPropsType {
 
 const { width, height } = Dimensions.get('window')
 const CartItem: FC<CartItemPropsType> = ({ product }) => {
+   const dispatch = useDispatch()
    return (
       <View style={{ backgroundColor: 'white', flex: 1 }}>
          <View style={styles.mainContain}>
@@ -28,9 +31,12 @@ const CartItem: FC<CartItemPropsType> = ({ product }) => {
             </View>
             <View style={styles.rightContaine}>
                <View style={styles.productCountWrapper}>
-                  <View style={styles.productCountRowContain}>
+                  <TouchableOpacity
+                     onPress={() => dispatch(removeFromCart(product) as any)}
+                     style={styles.productCountRowContain}
+                  >
                      <Text style={styles.productCountRowContainText}>-</Text>
-                  </View>
+                  </TouchableOpacity>
                   <View style={[styles.productCountRowContain, { backgroundColor: '#5d3ebd' }]}>
                      <Text style={[styles.productCountRowContainText, { color: 'white' }]}>1</Text>
                   </View>
@@ -62,6 +68,9 @@ const styles = StyleSheet.create({
    ımageStyle: {
       width: width * 0.2,
       height: height * 0.09,
+      borderWidth: 0.4,
+      borderColor: 'lightgray',
+      borderRadius: 8,
    },
    textWrapper: {
       marginLeft: 8,

@@ -1,8 +1,5 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React, { FC } from 'react'
+import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-
-import { Entypo, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
 import HomeNavigator from './HomeNavigator'
 import { MyTabBar } from '../components'
 

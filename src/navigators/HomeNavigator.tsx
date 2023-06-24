@@ -7,11 +7,20 @@ import ProductDetailScreen from '../screens/ProductDetailScreen'
 import CartScreen from '../screens/CartScreen'
 import { Ionicons } from '@expo/vector-icons'
 import { Foundation } from '@expo/vector-icons'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppState } from '../store/reducers'
+import { useGetTotalPrice } from '../hooks/useGetTotalPrice'
+import { clearCart } from '../store/actions/CartActions/CartActions'
 
 const Stack = createNativeStackNavigator()
 
 const { width } = Dimensions.get('window')
 const HomeNavigator = ({ navigation, route }: any) => {
+   const { cart_data } = useSelector((state: AppState) => state.cart)
+   const price = useGetTotalPrice(cart_data)
+
+   const dispatch = useDispatch()
+
    const returnOption = (title: string, headerLeft?: FC | null | boolean, headerRight?: FC | null) => {
       return {
          headerTintColor: 'white',
@@ -56,7 +65,9 @@ const HomeNavigator = ({ navigation, route }: any) => {
                return (
                   <TouchableOpacity onPress={() => navigation.navigate('CartScreen')} style={styles.basketBtn}>
                      <Image source={require('../../assets/cart.png')} style={styles.basketBtnImage} />
-                     <Text style={styles.basketBtnText}>{'\u20BA'}13,00</Text>
+                     <Text style={styles.basketBtnText}>
+                        {'\u20BA'} {price}
+                     </Text>
                   </TouchableOpacity>
                )
             })}
@@ -76,7 +87,7 @@ const HomeNavigator = ({ navigation, route }: any) => {
             name="CartScreen"
             component={CartScreen}
             options={returnOption('Sepetim', true, () => (
-               <TouchableOpacity>
+               <TouchableOpacity onPress={() => dispatch(clearCart() as any)}>
                   <Ionicons name="trash-sharp" size={24} color="white" />
                </TouchableOpacity>
             ))}

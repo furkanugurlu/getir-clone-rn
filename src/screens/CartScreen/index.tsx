@@ -4,18 +4,19 @@ import productDummyData from '../../../assets/productDummyData'
 import { CartItem, ProductItem } from '../../components'
 import { useSelector } from 'react-redux'
 import { AppState } from '../../store/reducers'
+import { useGetTotalPrice } from '../../hooks/useGetTotalPrice'
 
 const { height, width } = Dimensions.get('window')
 const index = () => {
-   const { loading } = useSelector((state: AppState) => state.main)
-   console.log({ loading })
+   const { cart_data } = useSelector((state: AppState) => state.cart)
+   const price = useGetTotalPrice(cart_data)
 
    return (
       <View style={{ flex: 1 }}>
          <ScrollView style={{ marginBottom: height * 0.1 }} showsVerticalScrollIndicator={false}>
             <FlatList
                scrollEnabled={true}
-               data={productDummyData.slice(0, 6)}
+               data={cart_data}
                keyExtractor={(_, index) => index.toString()}
                renderItem={({ item }) => <CartItem product={item} />}
             />
@@ -36,7 +37,10 @@ const index = () => {
                <Text style={styles.continueBtnText}>Devam Et</Text>
             </TouchableOpacity>
             <View style={styles.priceWrapper}>
-               <Text style={styles.priceWrapperText}>{'\u20ba'}20.40</Text>
+               <Text style={styles.priceWrapperText}>
+                  {'\u20ba'}
+                  {price}
+               </Text>
             </View>
          </View>
       </View>
