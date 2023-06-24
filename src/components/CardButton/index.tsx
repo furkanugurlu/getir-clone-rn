@@ -1,11 +1,14 @@
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { FC } from 'react'
 
 const { width, height } = Dimensions.get('window')
-const CardButton = () => {
+interface CardButtonProps {
+   onPress?: () => void
+}
+const CardButton: FC<CardButtonProps> = ({ onPress }) => {
    return (
       <View style={styles.wrapper}>
-         <TouchableOpacity style={styles.btn}>
+         <TouchableOpacity onPress={onPress} style={styles.btn}>
             <Text style={styles.btnText}>Sepete ekle</Text>
          </TouchableOpacity>
       </View>

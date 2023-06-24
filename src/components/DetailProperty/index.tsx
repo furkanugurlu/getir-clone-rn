@@ -24,7 +24,7 @@ const DetailProperty = () => {
             <Text
                style={{
                   fontSize: index == 0 ? 11 : 13,
-                  color: index == 0 ? 'black' : '#687482',
+                  color: index == 0 ? '#4E4E4E' : '#687482',
                   fontWeight: index == 0 ? '400' : '500',
                }}
             >

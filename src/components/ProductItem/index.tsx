@@ -3,6 +3,8 @@ import React, { FC } from 'react'
 import { Entypo } from '@expo/vector-icons'
 import { Product } from '../../types'
 import { useNavigation } from '@react-navigation/native'
+import { useDispatch } from 'react-redux'
+import { addToCart } from '../../store/actions/CartActions/CartActions'
 
 const { width, height } = Dimensions.get('window')
 
@@ -13,8 +15,10 @@ interface ProductItemPropsType {
 }
 const ProductItem: FC<ProductItemPropsType> = ({ item, ml, isDiscount }) => {
    const navigation = useNavigation()
+   const dispatch = useDispatch()
    return (
       <TouchableOpacity
+         // @ts-ignore
          onPress={() => navigation.navigate('ProductDetail', { product: item })}
          style={[
             styles.productWrapper,
@@ -41,9 +45,9 @@ const ProductItem: FC<ProductItemPropsType> = ({ item, ml, isDiscount }) => {
             <Text style={styles.productNameText}>{item.name}</Text>
             <Text style={styles.productAmountText}>{item.miktar}</Text>
          </View>
-         <View style={styles.addBtnStyle}>
+         <TouchableOpacity onPress={() => dispatch(addToCart(item) as any)} style={styles.addBtnStyle}>
             <Entypo name="plus" size={22} color="#5d3ebd" />
-         </View>
+         </TouchableOpacity>
       </TouchableOpacity>
    )
 }
